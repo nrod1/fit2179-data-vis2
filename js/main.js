@@ -5,6 +5,7 @@
 
 // GitHub raw base URL — UPDATE THIS with your GitHub username + repo
 const DATA_BASE = "https://raw.githubusercontent.com/nrod1/fit2179-data-vis2/main/data/";
+const SANKY_DATA = "data/sankey_data.csv";
 
 const TEAL   = "#1a8fa0";
 const GOLD   = "#e8a020";
@@ -23,7 +24,7 @@ const YEAR_ORDER = [
    CHART 0 — Sankey Diagram (Standard Vega v5)
    ================================================================ */
 const chart0_sankey = {
-  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
   "width": 750,
   "height": 380,
   "padding": 10,
@@ -397,6 +398,7 @@ const chart5_jobs_trend = {
           "axis": { "title": "Jobs ('000)", "labelFontSize": 11 },
           "scale": { "domain": [300, 700] }
         },
+        "y2": { "value": 300 },
         "color": { "value": GOLD }
       }
     },
@@ -849,8 +851,87 @@ function renderChart(elementId, spec) {
     });
 }
 
+function renderSankey() {
+  const el = document.getElementById("chart-sankey");
+  if (!el) return;
+  el.innerHTML = "";
+
+  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+  const width = 750 - margin.left - margin.right;
+  const height = 380 - margin.top - margin.bottom;
+
+  const svg = d3.select(el)
+    .append("svg")
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .style("max-width", "100%");
+
+  const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+  d3.csv(SANKY_DATA, d3.autoType).then(data => {
+    const nodeNames = Array.from(new Set(data.flatMap(d => [d.source, d.destination])));
+    const graph = {
+      nodes: nodeNames.map(name => ({ name })),
+      links: data.map(d => ({ source: d.source, target: d.destination, value: d.value }))
+    };
+
+    d3.sankey()
+      .nodeId(d => d.name)
+      .nodeWidth(15)
+      .nodePadding(15)
+      .extent([[0, 0], [width, height]])
+      (graph);
+
+    const color = d3.scaleOrdinal()
+      .domain(graph.nodes.map(d => d.name))
+      .range([TEAL, GOLD, CORAL, NAVY, GREEN, PURPLE, LIGHT]);
+
+    g.append("g")
+      .attr("fill", "none")
+      .attr("stroke-opacity", 0.3)
+      .selectAll("path")
+      .data(graph.links)
+      .join("path")
+      .attr("d", d3.sankeyLinkHorizontal())
+      .attr("stroke", d => color(d.source.name))
+      .attr("stroke-width", d => Math.max(1, d.width))
+      .on("mouseover", function() { d3.select(this).attr("stroke-opacity", 0.7); })
+      .on("mouseout", function() { d3.select(this).attr("stroke-opacity", 0.3); })
+      .append("title")
+      .text(d => `${d.source.name} → ${d.target.name}: ${d.value}k visitors`);
+
+    const node = g.append("g")
+      .selectAll("g")
+      .data(graph.nodes)
+      .join("g");
+
+    node.append("rect")
+      .attr("x", d => d.x0)
+      .attr("y", d => d.y0)
+      .attr("height", d => Math.max(1, d.y1 - d.y0))
+      .attr("width", d => Math.max(1, d.x1 - d.x0))
+      .attr("fill", d => color(d.name))
+      .attr("stroke", "#ffffff")
+      .append("title")
+      .text(d => `${d.name}\n${d.value}`);
+
+    node.append("text")
+      .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+      .attr("y", d => (d.y0 + d.y1) / 2)
+      .attr("dy", "0.35em")
+      .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+      .style("font-size", "11px")
+      .style("fill", "#1a2e38")
+      .text(d => d.name);
+  }).catch(err => {
+    console.error('Error rendering sankey chart:', err);
+    el.innerHTML = `<p style="color:#e05a40;padding:1rem">Chart failed to load. Ensure data files are on GitHub.</p>`;
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  renderChart("chart-sankey",           chart0_sankey);
+  renderSankey();
   renderChart("chart-choropleth",       chart1_choropleth);
   renderChart("chart-gdp-trend",        chart2_gdp_trend);
   renderChart("chart-visitor-type",     chart3_visitor_type);
