@@ -5,24 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Australia's Tourism Economy — FIT2179 Data Visualisation 2</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
 
-  <!-- Vega-Lite v5 -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<!-- ============================================================
-     HERO
-     ============================================================ -->
 <header class="hero">
   <div class="hero-inner">
     <p class="hero-kicker">FIT2179 Data Visualisation 2 &nbsp;·&nbsp; Australia Tourism &nbsp;·&nbsp; May 2026</p>
@@ -53,30 +47,34 @@
   </div>
 </header>
 
-<!-- ============================================================
-     SECTION 1 — THE LANDSCAPE: WHERE TOURISM LIVES
-     ============================================================ -->
 <section class="section section--light" id="section-map">
   <div class="container">
     <div class="section-header">
       <p class="section-number">Section 1 — The Landscape</p>
       <h2>Where Does Tourism Live in Australia?</h2>
       <p>
-        Tourism businesses are not evenly spread across Australia's vast territory.
-        New South Wales and Victoria together account for nearly two-thirds of all tourism
-        characteristic businesses — reflecting the dominance of Sydney and Melbourne as
-        international gateways and domestic hubs.
+        Tourism businesses and international visitors are not evenly spread across Australia's vast territory. 
+        Before zooming into local businesses, let's look at where our global guests actually go when they arrive.
       </p>
+    </div>
+
+    <div class="chart-card">
+      <p class="chart-title">Visitor Flow: Where Do International Guests Go?</p>
+      <p class="chart-subtitle">Sankey diagram showing inbound tourist destinations from top origin countries</p>
+      <div id="chart-sankey" style="display:flex; justify-content:center; overflow-x:auto;"></div>
+      <div class="annotation">
+        <strong>Hover over the links</strong> to see visitor flow volumes. New Zealand and China historically form the largest inbound markets, with New South Wales and Victoria acting as the primary gateways for the vast majority of international arrivals.
+      </div>
     </div>
 
     <div class="grid-60-40">
       <div>
         <div class="chart-card">
-          <p class="chart-title">Tourism Businesses by State — Choropleth</p>
-          <p class="chart-subtitle">Tourism characteristic industry businesses, June 2020 (ABS Business Register)</p>
+          <p class="chart-title">Tourism Businesses by State Over Time</p>
+          <p class="chart-subtitle">Use the slider to see business density from 2020 to 2025</p>
           <div id="chart-choropleth"></div>
           <div class="annotation">
-            Hover over each state to see the exact business count. Darker blue = more tourism businesses.
+            Hover over each state for details. Notice how the number of tourism businesses grew post-2021 as the industry entered its recovery phase.
           </div>
         </div>
       </div>
@@ -86,7 +84,7 @@
           <p class="chart-subtitle">Circle area proportional to total tourism businesses</p>
           <div id="chart-symbol-map"></div>
           <div class="annotation">
-            NSW (65,838) and VIC (59,069) dwarf other states; NT (1,479) has fewest.
+            NSW and VIC heavily dominate the national landscape, housing nearly 60% of the entire country's characteristic tourism businesses.
           </div>
         </div>
       </div>
@@ -118,9 +116,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     SECTION 2 — THE ECONOMY: HOW BIG IS TOURISM?
-     ============================================================ -->
 <section class="section section--dark" id="section-economy">
   <div class="container">
     <div class="section-header">
@@ -137,10 +132,10 @@
       <div>
         <div class="chart-card">
           <p class="chart-title">Tourism GDP, 2016–17 to 2024–25</p>
-          <p class="chart-subtitle">Total tourism gross domestic product, current prices ($M) — ABS Tourism Satellite Account 2024–25</p>
+          <p class="chart-subtitle">Total tourism gross domestic product ($M)</p>
           <div id="chart-gdp-trend"></div>
           <div class="annotation">
-            Tourism GDP plunged from $47B (2018–19) to $32B in 2020–21 — a 43% drop — before recovering
+            Tourism GDP plunged from $47B to $32B in 2020–21 — a 43% drop — before recovering
             to a record $81B by 2024–25.
           </div>
         </div>
@@ -152,7 +147,7 @@
           <div id="chart-dom-intl"></div>
           <div class="annotation">
             International tourists account for ~23% of tourism GDP in 2024–25, recovering from near-zero
-            during border closures (2020–21).
+            during border closures.
           </div>
         </div>
       </div>
@@ -161,20 +156,17 @@
     <div style="margin-top:2rem">
       <div class="chart-card">
         <p class="chart-title">Share of Tourism GDP by Visitor Type — Normalised Stacked Area</p>
-        <p class="chart-subtitle">Proportion of tourism GDP contributed by each visitor segment, 2016–17 to 2024–25 (ABS TSA 2024–25)</p>
+        <p class="chart-subtitle">Proportion of tourism GDP contributed by each visitor segment</p>
         <div id="chart-visitor-type"></div>
         <div class="annotation">
           During COVID-19 (2020–21), domestic household visitors carried nearly 90% of all tourism GDP — the invisible
-          backbone that kept the industry from total collapse. International visitors are now recovering but remain below pre-pandemic levels.
+          backbone that kept the industry from total collapse.
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============================================================
-     SECTION 3 — INTERNATIONAL VISITORS
-     ============================================================ -->
 <section class="section section--white" id="section-international">
   <div class="container">
     <div class="section-header">
@@ -183,7 +175,7 @@
       <p>
         Before COVID-19, international visitors spent over $46 billion in Australia annually.
         After almost vanishing in 2020–21, international tourism consumption has rebounded strongly,
-        reaching $53.7 billion in 2024–25 — surpassing the pre-pandemic peak.
+        reaching $53.7 billion in 2024–25.
       </p>
     </div>
 
@@ -191,7 +183,7 @@
       <div>
         <div class="chart-card">
           <p class="chart-title">International Visitor Consumption in Australia</p>
-          <p class="chart-subtitle">Total tourism expenditure by inbound visitors within Australia, $M (ABS TSA 2024–25)</p>
+          <p class="chart-subtitle">Total tourism expenditure by inbound visitors within Australia ($M)</p>
           <div id="chart-intl-consumption"></div>
         </div>
 
@@ -221,9 +213,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     SECTION 4 — INDUSTRIES & JOBS
-     ============================================================ -->
 <section class="section section--light" id="section-industries">
   <div class="container">
     <div class="section-header">
@@ -231,8 +220,7 @@
       <h2>Who Powers the Tourism Industry?</h2>
       <p>
         Over 635,000 Australians work directly in tourism — from chefs and pilots to hotel managers
-        and tour guides. This section reveals which industries generate the most output and jobs,
-        and how employment has recovered from its COVID-19 low.
+        and tour guides. This section reveals which industries generate the most output and jobs.
       </p>
     </div>
 
@@ -240,22 +228,20 @@
       <div>
         <div class="chart-card">
           <p class="chart-title">Tourism Jobs by Industry (2024–25)</p>
-          <p class="chart-subtitle">Main jobs ('000) by tourism-related industry — ABS TSA 2024–25</p>
+          <p class="chart-subtitle">Main jobs ('000) by tourism-related industry</p>
           <div id="chart-jobs-industry"></div>
           <div class="annotation">
-            Cafes, restaurants &amp; retail each employ more than 100,000 people in tourism roles —
-            far exceeding accommodation, which most people associate with tourism.
+            Cafes, restaurants &amp; retail each employ more than 100,000 people in tourism roles.
           </div>
         </div>
       </div>
       <div>
         <div class="chart-card">
           <p class="chart-title">Tourism Industry Output by Sector (2024–25)</p>
-          <p class="chart-subtitle">Total industry output at basic prices ($M) — ABS TSA 2024–25</p>
+          <p class="chart-subtitle">Total industry output at basic prices ($M)</p>
           <div id="chart-output"></div>
           <div class="annotation">
-            Air &amp; water transport ($25.6B) generates the highest output of any individual sector,
-            reflecting Australia's reliance on long-haul flights.
+            Air &amp; water transport ($25.6B) generates the highest output of any individual sector.
           </div>
         </div>
       </div>
@@ -264,12 +250,11 @@
     <div style="margin-top:2rem">
       <div class="chart-card">
         <p class="chart-title">Output vs. Jobs — A Bubble View of Tourism Industries</p>
-        <p class="chart-subtitle">Each bubble = one tourism industry; size = output ($M); position shows output vs. employment relationship (2024–25)</p>
+        <p class="chart-subtitle">Each bubble = one tourism industry; size = output ($M)</p>
         <div id="chart-bubble"></div>
         <div class="annotation">
           <strong>Interesting contrast:</strong> Air &amp; water transport produces high output with relatively few jobs (capital-intensive).
           Cafes &amp; restaurants employ the most people but with moderate output — labour-intensive work.
-          Hover over bubbles to explore each industry.
         </div>
       </div>
     </div>
@@ -279,7 +264,7 @@
     <div style="margin-top:2.5rem">
       <div class="chart-card">
         <p class="chart-title">Total Tourism Employment Over Time</p>
-        <p class="chart-subtitle">Total main jobs in tourism industries ('000), 2016–17 to 2024–25 (ABS TSA 2024–25)</p>
+        <p class="chart-subtitle">Total main jobs in tourism industries ('000)</p>
         <div id="chart-jobs-trend"></div>
         <div class="annotation">
           Employment fell from 522,000 (2018–19) to 376,500 during the pandemic — a loss of nearly
@@ -291,9 +276,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     RESOLUTION
-     ============================================================ -->
 <section class="resolution" id="resolution">
   <div class="resolution-inner">
     <span class="resolution-icon">✈️</span>
@@ -320,9 +302,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
 <footer>
   <div class="container">
     <p style="margin-bottom:0.5rem">
@@ -345,12 +324,10 @@
       </a>
       &nbsp;·&nbsp;
       Geographic boundaries: <a href="https://github.com/rowanhogan/australian-states" target="_blank">Australian States GeoJSON</a>
-      (CC0 Public Domain)
     </p>
   </div>
 </footer>
 
-<!-- Main JS -->
 <script src="js/main.js"></script>
 
 </body>
