@@ -7,7 +7,7 @@
    ============================================================ */
 
 // GitHub raw base URL — UPDATE THIS with your GitHub username + repo
-const DATA_BASE = "https://raw.githubusercontent.com/YOUR_USERNAME/fit2179-data-vis2/main/data/";
+const DATA_BASE = "https://raw.githubusercontent.com/nrod1/fit2179-data-vis2/main/data/";
 
 // Shared colour palette
 const TEAL   = "#1a8fa0";
@@ -28,7 +28,7 @@ const YEAR_ORDER = [
    CHART 1 — Choropleth Map: Tourism Businesses by State
    ================================================================ */
 const chart1_choropleth = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 420,
   "title": {
@@ -105,7 +105,7 @@ const chart1_choropleth = {
    CHART 2 — Line Chart: Tourism GDP Over Time (area + line)
    ================================================================ */
 const chart2_gdp_trend = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 260,
   "data": { "url": DATA_BASE + "tourism_gdp.csv" },
@@ -160,7 +160,7 @@ const chart2_gdp_trend = {
    CHART 3 — Stacked Area Chart: GDP by Visitor Type
    ================================================================ */
 const chart3_visitor_type = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 260,
   "data": { "url": DATA_BASE + "gdp_by_visitor_type.csv" },
@@ -196,7 +196,7 @@ const chart3_visitor_type = {
    CHART 4 — Horizontal Bar: Jobs by Industry (2024-25)
    ================================================================ */
 const chart4_jobs_industry = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 320,
   "data": { "url": DATA_BASE + "jobs_by_industry_2024.csv" },
@@ -229,7 +229,7 @@ const chart4_jobs_industry = {
    CHART 5 — Line Chart: Total Tourism Jobs Trend
    ================================================================ */
 const chart5_jobs_trend = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 220,
   "data": { "url": DATA_BASE + "jobs_trend.csv" },
@@ -288,7 +288,7 @@ const chart5_jobs_trend = {
    CHART 6 — Grouped Bar: Domestic vs International GDP
    ================================================================ */
 const chart6_dom_intl = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 280,
   "data": { "url": DATA_BASE + "domestic_vs_intl.csv" },
@@ -324,7 +324,7 @@ const chart6_dom_intl = {
    CHART 7 — Line: International Visitor Consumption
    ================================================================ */
 const chart7_intl_consumption = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 240,
   "data": { "url": DATA_BASE + "intl_visitor_consumption.csv" },
@@ -367,7 +367,7 @@ const chart7_intl_consumption = {
    CHART 8 — Proportional Symbol Map: Business Density per State
    ================================================================ */
 const chart8_symbol_map = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 400,
   "projection": { "type": "mercator" },
@@ -421,7 +421,7 @@ const chart8_symbol_map = {
    CHART 9 — Donut / Arc: Business type split (2025)
    ================================================================ */
 const chart9_donut = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": 260,
   "height": 260,
   "data": {
@@ -449,7 +449,7 @@ const chart9_donut = {
    CHART 10 — Scatter/Bubble: Output vs Jobs by Industry (2024-25)
    ================================================================ */
 const chart10_bubble = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 320,
   "data": {
@@ -504,7 +504,7 @@ const chart10_bubble = {
    CHART 11 — Businesses Over Time (stacked bar)
    ================================================================ */
 const chart11_biz_trend = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 250,
   "data": {
@@ -555,7 +555,7 @@ const chart11_biz_trend = {
    CHART 12 — Output by Industry (horizontal bar, 2024-25)
    ================================================================ */
 const chart12_output = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 320,
   "data": {
