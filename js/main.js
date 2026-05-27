@@ -907,7 +907,7 @@ const chart_marimekko = {
       "axis": {"title": null, "labelAngle": -30}
     },
     // Width is determined by the total GDP of that year
-    "width": {"field": "TotalGDP", "type": "quantitative", "scale": {"range": [50, 100]}},
+    "width": {"field": "TotalGDP", "type": "quantitative", "scale": {"range": [80, 420]}},
     "y": {
       "field": "GDP", "type": "quantitative",
       "stack": "normalize", // Converts to percentage share
