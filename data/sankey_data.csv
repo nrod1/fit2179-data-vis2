@@ -1,18 +1,27 @@
-﻿source,destination,value
-New Zealand,New South Wales,450
-New Zealand,Victoria,300
-New Zealand,Queensland,420
-New Zealand,Western Australia,100
-China,New South Wales,350
-China,Victoria,280
-China,Queensland,150
-USA,New South Wales,200
-USA,Victoria,150
-USA,Queensland,120
-UK,New South Wales,180
-UK,Western Australia,150
-UK,Victoria,120
-Japan,Queensland,180
-Japan,New South Wales,100
-India,Victoria,150
-India,New South Wales,120
+source,destination,value
+New Zealand,New South Wales,495
+New Zealand,Victoria,340
+New Zealand,Queensland,285
+New Zealand,Western Australia,129
+New Zealand,South Australia,54
+China,New South Wales,370
+China,Victoria,255
+China,Queensland,213
+China,Western Australia,96
+China,South Australia,40
+United Kingdom,New South Wales,274
+United Kingdom,Victoria,188
+United Kingdom,Queensland,158
+United Kingdom,Western Australia,71
+United States of America,New South Wales,265
+United States of America,Victoria,182
+United States of America,Queensland,153
+United States of America,Western Australia,69
+India,New South Wales,163
+India,Victoria,112
+India,Queensland,94
+India,Western Australia,42
+Singapore,New South Wales,147
+Singapore,Victoria,101
+Singapore,Queensland,84
+Singapore,Western Australia,38

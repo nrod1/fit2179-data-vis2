@@ -69,24 +69,24 @@
       </div>
     </div>
 
-    <div class="grid-60-40">
+    <div class="grid-40-60" style="margin-top:2rem">
+      <div>
+        <div class="chart-card">
+          <p class="chart-title">Visitor Expenditure by State & Origin</p>
+          <p class="chart-subtitle">Concentric circles: Outer = Domestic, Inner = International</p>
+          <div id="chart-symbol-map"></div>
+          <div class="annotation">
+            NSW and VIC lead in economic volume, but notice how heavily every state relies on <strong>Domestic</strong> spending (teal) compared to International (gold).
+          </div>
+        </div>
+      </div>
       <div>
         <div class="chart-card">
           <p class="chart-title">Tourism Businesses by State Over Time</p>
           <p class="chart-subtitle">Use the slider to see business density from 2020 to 2025</p>
           <div id="chart-choropleth"></div>
           <div class="annotation">
-            Hover over each state for details. Notice how the number of tourism businesses grew post-2021 as the industry entered its recovery phase.
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="chart-card">
-          <p class="chart-title">Business Count by State — Proportional Symbols</p>
-          <p class="chart-subtitle">Circle area proportional to total tourism businesses</p>
-          <div id="chart-symbol-map"></div>
-          <div class="annotation">
-            NSW and VIC heavily dominate the national landscape, housing nearly 60% of the entire country's characteristic tourism businesses.
+            Hover over each state for details. Move the slider to track business density shifts across the years.
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
       <div>
         <div class="chart-card" style="display:flex;flex-direction:column;align-items:center;">
           <p class="chart-title">Industry Type Split (June 2025)</p>
-          <p class="chart-subtitle">Characteristic vs. Connected businesses</p>
+          <p class="chart-subtitle">Micro businesses make up over 50% of the industry</p>
           <div id="chart-donut" style="max-width:280px;margin:0 auto"></div>
           <p style="font-size:0.85rem;text-align:center;color:var(--text-light);margin-top:0.8rem">
             Total: <strong>361,270</strong> tourism businesses nationally
@@ -156,16 +156,16 @@
     </div>
 
     <div style="margin-top:2rem">
-      <div class="chart-card">
-        <p class="chart-title">Share of Tourism GDP by Visitor Type — Normalised Stacked Area</p>
-        <p class="chart-subtitle">Proportion of tourism GDP contributed by each visitor segment</p>
-        <div id="chart-visitor-type"></div>
-        <div class="annotation">
-          During COVID-19 (2020–21), domestic household visitors carried nearly 90% of all tourism GDP — the invisible
-          backbone that kept the industry from total collapse.
-        </div>
-      </div>
+        <div class="chart-card">
+          <p class="chart-title">Visitor Segment Share vs. Total Tourism Economy</p>
+          <p class="chart-subtitle">Marimekko plot: Bar width = Total GDP ($M); Bar height = % share (2016–25)</p>
+          <div id="chart-marimekko" style="display:flex; justify-content:center;"></div>
+          <div class="annotation">
+            <strong>How to read this:</strong> The <strong>width</strong> of each year represents the total Tourism GDP, 
+      while the <strong>height</strong> of each segment shows that segment's relative share of the economy.
     </div>
+  </div>
+</div>
   </div>
 </section>
 

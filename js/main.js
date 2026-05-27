@@ -3,9 +3,9 @@
    All Vega-Lite & Vega chart specifications
    ============================================================ */
 
-// GitHub raw base URL — UPDATE THIS with your GitHub username + repo
+// GitHub raw base URL
 const DATA_BASE = "https://raw.githubusercontent.com/nrod1/fit2179-data-vis2/main/data/";
-const SANKY_DATA = "data/sankey_data.csv";
+const SANKY_DATA = DATA_BASE + "sankey_data.csv";
 
 const TEAL   = "#1a8fa0";
 const GOLD   = "#e8a020";
@@ -75,7 +75,7 @@ const chart0_sankey = {
       "name": "color",
       "type": "ordinal",
       "domain": {"data": "all_nodes", "field": "name"},
-      "range": [TEAL, GOLD, CORAL, NAVY, GREEN, PURPLE, LIGHT]
+      "range": {"scheme": "category20"}
     }
   ],
   "marks": [
@@ -265,7 +265,7 @@ const chart2_gdp_trend = {
       "encoding": {
         "x": { "field": "year", "type": "ordinal", "sort": YEAR_ORDER },
         "y": { "field": "tourism_gdp_m", "type": "quantitative" },
-        "text": { "field": "tourism_gdp_m", "type": "quantitative", "format": "$,.0f M" },
+        "text": { "signal": "format(datum.tourism_gdp_m, '$,.0f') + ' M'" },
         "opacity": {
           "condition": {"param": "hover", "empty": false, "value": 1},
           "value": 0
@@ -542,7 +542,7 @@ const chart7_intl_consumption = {
 };
 
 /* ================================================================
-   CHART 8 — Proportional Symbol Map: Business Density per State
+   CHART 8 — Concentric Symbol Map: Domestic vs Intl Spend
    ================================================================ */
 const chart8_symbol_map = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
@@ -555,48 +555,74 @@ const chart8_symbol_map = {
         "url": DATA_BASE + "australia_states_simple.topojson",
         "format": { "type": "topojson", "feature": "states" }
       },
-      "mark": { "type": "geoshape", "fill": "#d6eef4", "stroke": "#8ecfdc", "strokeWidth": 1.2 }
+      "mark": { "type": "geoshape", "fill": "#e8f4f8", "stroke": "#8ecfdc", "strokeWidth": 1.2 }
     },
     {
       "data": {
         "values": [
-          { "state": "New South Wales",             "lon": 147.0, "lat": -32.5, "businesses": 65838, "category": "Characteristic", "pct": 34 },
-          { "state": "Victoria",                    "lon": 144.5, "lat": -37.0, "businesses": 59069, "category": "Characteristic", "pct": 30 },
-          { "state": "Queensland",                  "lon": 144.0, "lat": -22.0, "businesses": 34181, "category": "Characteristic", "pct": 18 },
-          { "state": "Western Australia",           "lon": 121.5, "lat": -25.5, "businesses": 17280, "category": "Characteristic", "pct": 9 },
-          { "state": "South Australia",             "lon": 135.5, "lat": -30.0, "businesses": 10264, "category": "Characteristic", "pct": 5 },
-          { "state": "Tasmania",                    "lon": 146.5, "lat": -42.2, "businesses": 3842,  "category": "Characteristic", "pct": 2 },
-          { "state": "Australian Capital Territory","lon": 149.1, "lat": -35.5, "businesses": 2676,  "category": "Characteristic", "pct": 1 },
-          { "state": "Northern Territory",          "lon": 133.5, "lat": -19.5, "businesses": 1479,  "category": "Characteristic", "pct": 1 }
+          {"State": "New South Wales", "Lon": 147.0, "Lat": -32.5, "Domestic": 35000, "International": 11000, "TotalSpend": 46000},
+          {"State": "Victoria", "Lon": 144.5, "Lat": -37.0, "Domestic": 26000, "International": 8400, "TotalSpend": 34400},
+          {"State": "Queensland", "Lon": 144.0, "Lat": -22.0, "Domestic": 30000, "International": 6000, "TotalSpend": 36000},
+          {"State": "Western Australia", "Lon": 121.5, "Lat": -25.5, "Domestic": 12000, "International": 2200, "TotalSpend": 14200},
+          {"State": "South Australia", "Lon": 135.5, "Lat": -30.0, "Domestic": 8000, "International": 1100, "TotalSpend": 9100},
+          {"State": "Tasmania", "Lon": 146.5, "Lat": -42.2, "Domestic": 3500, "International": 400, "TotalSpend": 3900},
+          {"State": "Northern Territory", "Lon": 133.5, "Lat": -19.5, "Domestic": 2000, "International": 300, "TotalSpend": 2300},
+          {"State": "Australian Capital Territory", "Lon": 149.1, "Lat": -35.5, "Domestic": 2500, "International": 200, "TotalSpend": 2700}
         ]
       },
+      "transform": [
+        { "fold": ["Domestic", "International"], "as": ["SpendType", "Amount"] }
+      ],
       "params": [{
         "name": "hover",
         "select": {"type": "point", "on": "mouseover"}
       }],
-      "mark": { "type": "circle", "stroke": NAVY, "strokeWidth": 1, "cursor": "pointer" },
+      "mark": { "type": "circle", "stroke": "#ffffff", "strokeWidth": 0.5, "cursor": "pointer" },
       "encoding": {
-        "longitude": { "field": "lon", "type": "quantitative" },
-        "latitude":  { "field": "lat", "type": "quantitative" },
+        "longitude": { "field": "Lon", "type": "quantitative" },
+        "latitude":  { "field": "Lat", "type": "quantitative" },
         "size": {
-          "field": "businesses",
+          "field": "Amount",
           "type": "quantitative",
           "scale": {
-            "type": "threshold",
-            "domain": [5000, 15000, 40000],
-            "range": [100, 400, 1200, 3000]
+            "type": "sqrt",
+            "domain": [0, 40000],
+            "range": [0, 1500] // <--- DOTS ARE SMALLER HERE
           },
-          "legend": { "title": "Tourism Businesses", "format": ",.0f", "orient": "bottom-right" }
+          "legend": { 
+            "title": "Spend ($M)", 
+            "format": "$,.0f", 
+            "orient": "none", 
+            "legendX": 94,  // <--- MOVED TO LEFT
+            "legendY": 230, // <--- MOVED DOWN
+            "titleFontSize": 10, "labelFontSize": 9 
+          }
         },
-        "color": { "value": TEAL },
+        "color": {
+          "field": "SpendType",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Domestic", "International"],
+            "range": [TEAL, GOLD]
+          },
+          "legend": { 
+            "title": "Market", 
+            "orient": "none", 
+            "legendX": 10,   // <--- MOVED TO LEFT
+            "legendY": 330,  // <--- MOVED DOWN (UNDER THE OTHER LEGEND)
+            "titleFontSize": 10, "labelFontSize": 9 
+          }
+        },
+        "order": { "field": "Amount", "type": "quantitative", "sort": "descending" },
         "opacity": {
           "condition": {"param": "hover", "empty": false, "value": 1},
-          "value": 0.5
+          "value": 0.85
         },
         "tooltip": [
-          { "field": "state", "type": "nominal", "title": "State" },
-          { "field": "businesses", "type": "quantitative", "title": "Tourism Businesses (Char.)", "format": "," },
-          { "field": "pct", "type": "quantitative", "title": "% of National Total", "format": ".0f" }
+          { "field": "State", "type": "nominal", "title": "State" },
+          { "field": "SpendType", "type": "nominal", "title": "Market Segment" },
+          { "field": "Amount", "type": "quantitative", "title": "Segment Spend ($M)", "format": "$,.0f" },
+          { "field": "TotalSpend", "type": "quantitative", "title": "Total State Spend ($M)", "format": "$,.0f" }
         ]
       }
     }
@@ -604,38 +630,59 @@ const chart8_symbol_map = {
 };
 
 /* ================================================================
-   CHART 9 — Donut / Arc: Business type split (2025)
+   CHART 9 — Isotype Chart: Tourism Business Sizes (10x10 Grid)
    ================================================================ */
 const chart9_donut = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": 260,
   "height": 260,
-  "data": {
-    "values": [
-      { "type": "Tourism Characteristic\nIndustries",  "count": 205101 },
-      { "type": "Tourism Connected\nIndustries",       "count": 156169 }
-    ]
+  "title": {
+    "text": "The Reality of Tourism",
+    "subtitle": "1 dot = 1% of the industry",
+    "anchor": "middle",
+    "color": "#1a2e38",
+    "fontSize": 20,
+    "font": "'Playfair Display', serif"
   },
+  // Generate 100 data points internally
+  "data": { "sequence": { "start": 1, "stop": 101, "as": "id" } },
+  "transform": [
+    // Calculate the size distribution based on ABS 2025 data
+    {
+      "calculate": "datum.id <= 52 ? 'Micro (1-4)' : datum.id <= 86 ? 'Small (5-19)' : datum.id <= 99 ? 'Medium (20-199)' : 'Large (200+)'",
+      "as": "Business Size"
+    },
+    // Mathematics to create a 10x10 grid layout
+    { "calculate": "ceil(datum.id / 10)", "as": "row" },
+    { "calculate": "datum.id - (datum.row - 1) * 10", "as": "col" }
+  ],
   "params": [{
     "name": "hover",
     "select": {"type": "point", "on": "mouseover"}
   }],
-  "mark": { "type": "arc", "innerRadius": 80, "padAngle": 0.02, "cornerRadius": 4, "cursor": "pointer" },
+  "mark": { "type": "circle", "size": 180, "cursor": "pointer" },
   "encoding": {
-    "theta": { "field": "count", "type": "quantitative" },
+    "x": { "field": "col", "type": "ordinal", "axis": null },
+    "y": { "field": "row", "type": "ordinal", "axis": null, "sort": "descending" },
     "color": {
-      "field": "type", "type": "nominal",
-      "scale": { "range": [TEAL, GOLD] },
-      "legend": { "title": null, "orient": "bottom", "labelFontSize": 11 }
+      "field": "Business Size",
+      "type": "nominal",
+      "scale": {
+        "domain": ["Micro (1-4)", "Small (5-19)", "Medium (20-199)", "Large (200+)"],
+        "range": [TEAL, LIGHT, GOLD, CORAL]
+      },
+      "legend": { "title": null, "orient": "bottom" }
     },
     "opacity": {
       "condition": {"param": "hover", "empty": false, "value": 1},
-      "value": 0.6
+      "value": 0.5
     },
     "tooltip": [
-      { "field": "type", "type": "nominal", "title": "Category" },
-      { "field": "count", "type": "quantitative", "title": "Businesses", "format": "," }
+      { "field": "Business Size", "type": "nominal", "title": "Employment Size" }
     ]
+  },
+  "config": {
+    "view": { "stroke": "transparent" }
   }
 };
 
@@ -748,7 +795,7 @@ const chart11_biz_trend = {
     "x": {
       "field": "year", "type": "ordinal",
       "sort": ["June 2020","June 2021","June 2022","June 2023","June 2024","June 2025"],
-      "axis": { "title": null, "labelFontSize": 11 }
+      "axis": { "title": null, "labelFontSize": 11, "labelAngle": 0 }
     },
     "y": {
       "field": "count", "type": "quantitative",
@@ -761,7 +808,7 @@ const chart11_biz_trend = {
         "domain": ["Characteristic", "Connected"],
         "range": [TEAL, LIGHT]
       },
-      "legend": { "title": "Industry Type", "orient": "top-left" }
+      "legend": { "title": "Industry Type", "orient": "none", "legendX": 10, "legendY": -12}
     },
     "opacity": {
       "condition": {"param": "hover", "empty": false, "value": 1},
@@ -828,6 +875,53 @@ const chart12_output = {
     "tooltip": [
       { "field": "industry", "type": "nominal", "title": "Industry" },
       { "field": "output", "type": "quantitative", "title": "Output ($M)", "format": ",.0f" }
+    ]
+
+
+
+  }
+};
+
+
+
+
+const chart_marimekko = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": "container",
+  "height": 300,
+  "data": { "url": DATA_BASE + "gdp_by_visitor_type_formatted.csv" },
+  "transform": [
+    {
+      "filter": "datum.Year !== 'Unnamed: 0' && !isNaN(+datum.GDP)"
+    },
+    {
+      "joinaggregate": [{"op": "sum", "field": "GDP", "as": "TotalGDP"}],
+      "groupby": ["Year"]
+    }
+  ],
+  "mark": {"type": "bar", "stroke": "#fff", "strokeWidth": 0.5, "cursor": "pointer"},
+  "encoding": {
+    "x": {
+      "field": "Year", "type": "ordinal",
+      "sort": YEAR_ORDER,
+      "axis": {"title": null, "labelAngle": -30}
+    },
+    // Width is determined by the total GDP of that year
+    "width": {"field": "TotalGDP", "type": "quantitative", "scale": {"range": [50, 100]}},
+    "y": {
+      "field": "GDP", "type": "quantitative",
+      "stack": "normalize", // Converts to percentage share
+      "axis": {"title": "Share of Tourism GDP", "format": ".0%"}
+    },
+    "color": {
+      "field": "Category", "type": "nominal",
+      "scale": {"range": [TEAL, LIGHT, GOLD]},
+      "legend": {"title": "Visitor Segment", "orient": "bottom"}
+    },
+    "tooltip": [
+      {"field": "Year", "type": "ordinal"},
+      {"field": "Category", "type": "nominal"},
+      {"field": "GDP", "type": "quantitative", "format": ",.0f", "title": "GDP ($M)"}
     ]
   }
 };
@@ -934,7 +1028,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderSankey();
   renderChart("chart-choropleth",       chart1_choropleth);
   renderChart("chart-gdp-trend",        chart2_gdp_trend);
-  renderChart("chart-visitor-type",     chart3_visitor_type);
+  renderChart("chart-marimekko",        chart_marimekko);
   renderChart("chart-jobs-industry",    chart4_jobs_industry);
   renderChart("chart-jobs-trend",       chart5_jobs_trend);
   renderChart("chart-dom-intl",         chart6_dom_intl);
