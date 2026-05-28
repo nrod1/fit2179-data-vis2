@@ -95,6 +95,33 @@ strong { font-weight: 600; color: var(--text-dark); }
   position: relative;
   max-width: var(--max-width);
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem; /* Adds space between text and image */
+}
+
+.hero-text {
+  flex: 1; /* Allows text to take up remaining space */
+}
+
+.hero-image {
+  flex: 0 0 45%; /* Forces the image container to take up 45% of the width */
+  max-width: 550px;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  /* Optional: Adds a slight tilt for an editorial magazine feel */
+  transform: rotate(2deg); 
+  transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+  transform: rotate(0deg) scale(1.02);
 }
 
 .hero-kicker {

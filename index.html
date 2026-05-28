@@ -19,33 +19,46 @@
 </head>
 <body>
 
+<!-- ============================================================
+     HERO
+     ============================================================ -->
 <header class="hero">
   <div class="hero-inner">
-    <p class="hero-kicker">FIT2179 Data Visualisation 2 &nbsp;·&nbsp; Australia Tourism &nbsp;·&nbsp; May 2026</p>
-    <h1>Australia's Tourism Economy:<br /><em>A Story of Collapse &amp; Comeback</em></h1>
-    <p class="hero-lead">
-      From a $81 billion industry employing 635,000 people to near-total shutdown — and back again.
-      Explore how Australian tourism shapes the national economy, which regions and industries drive it,
-      and why it matters to every Australian.
-    </p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="number">$81B</span>
-        <span class="label">Tourism GDP 2024–25</span>
-      </div>
-      <div class="hero-stat">
-        <span class="number">635K</span>
-        <span class="label">Tourism Jobs 2024–25</span>
-      </div>
-      <div class="hero-stat">
-        <span class="number">361K</span>
-        <span class="label">Tourism Businesses</span>
-      </div>
-      <div class="hero-stat">
-        <span class="number">2.9%</span>
-        <span class="label">Share of National GDP</span>
+    
+    <!-- LEFT SIDE: Text and Stats -->
+    <div class="hero-text">
+      <p class="hero-kicker">FIT2179 Data Visualisation 2 &nbsp;·&nbsp; Australia Tourism &nbsp;·&nbsp; May 2026</p>
+      <h1>Australia's Tourism Economy:<br /><em>A Story of Collapse &amp; Comeback</em></h1>
+      <p class="hero-lead">
+        From a $81 billion industry employing 635,000 people to near-total shutdown — and back again.
+        Explore how Australian tourism shapes the national economy, which regions and industries drive it,
+        and why it matters to every Australian.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="number">$81B</span>
+          <span class="label">Tourism GDP 2024–25</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">635K</span>
+          <span class="label">Tourism Jobs 2024–25</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">361K</span>
+          <span class="label">Tourism Businesses</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">2.9%</span>
+          <span class="label">Share of National GDP</span>
+        </div>
       </div>
     </div>
+
+    <!-- RIGHT SIDE: The Image -->
+    <div class="hero-image">
+      <img src="https://img.delicious.com.au/nYnbZ-Uo/del/2020/12/tourism-australias-ten-most-popular-instagram-posts-of-2020-144184-2.jpg" alt="Beautiful Australian beach" />
+    </div>
+
   </div>
 </header>
 
@@ -60,10 +73,31 @@
       </p>
     </div>
 
+    <!-- NEW SANKEY DIAGRAM WITH ICONS -->
     <div class="chart-card">
       <p class="chart-title">Visitor Flow: Where Do International Guests Go?</p>
       <p class="chart-subtitle">Sankey diagram showing inbound tourist destinations from top origin countries</p>
-      <div id="chart-sankey" style="display:flex; justify-content:center; overflow-x:auto;"></div>
+      
+      <!-- Flex wrapper to place icons on left and right -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem;">
+        
+        <!-- Left Icon: Departures -->
+        <div style="text-align: center; opacity: 0.6; min-width: 60px;">
+          <img src="https://cdn-icons-png.flaticon.com/512/565/565514.png" alt="Departures" style="width: 35px; height: 35px; filter: hue-rotate(180deg) brightness(0.5);" />
+          <p style="font-size: 0.7rem; margin-top: 0.3rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-mid); text-transform: uppercase;">Origin</p>
+        </div>
+
+        <!-- The Chart -->
+        <div id="chart-sankey" style="overflow-x:auto;"></div>
+
+        <!-- Right Icon: Arrivals -->
+        <div style="text-align: center; opacity: 0.6; min-width: 60px;">
+          <img src="https://cdn-icons-png.flaticon.com/512/565/565513.png" alt="Arrivals" style="width: 35px; height: 35px; filter: hue-rotate(180deg) brightness(0.5);" />
+          <p style="font-size: 0.7rem; margin-top: 0.3rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-mid); text-transform: uppercase;">Dest.</p>
+        </div>
+
+      </div>
+
       <div class="annotation">
         <strong>Hover over the links</strong> to see visitor flow volumes. New Zealand and China historically form the largest inbound markets, with New South Wales and Victoria acting as the primary gateways for the vast majority of international arrivals.
       </div>
@@ -120,14 +154,19 @@
 
 <section class="section section--dark" id="section-economy">
   <div class="container">
-    <div class="section-header">
-      <p class="section-number">Section 2 — The Economic Scale</p>
-      <h2>Tourism Is a $81 Billion Engine</h2>
-      <p>
-        Australia's tourism industry contributes 2.9% of national GDP — more than agriculture,
-        and comparable to the mining services sector. But this figure masks dramatic swings:
-        the COVID-19 pandemic nearly halved tourism's contribution overnight.
-      </p>
+    <div class="section-header" style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 300px;">
+        <p class="section-number">Section 2 — The Economic Scale</p>
+        <h2>Tourism Is a $81 Billion Engine</h2>
+        <p>
+          Australia's tourism industry contributes 2.9% of national GDP — more than agriculture,
+          and comparable to the mining services sector. But this figure masks dramatic swings:
+          the COVID-19 pandemic nearly halved tourism's contribution overnight.
+        </p>
+      </div>
+      <div style="flex: 0 0 150px;">
+        <img src="https://au.prosegurchange.com/dam/jcr:fe87c31d-a176-4aaa-a820-e0ff9862ad92/smart%20travel.webp" alt="Smart Travel" style="width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-sm); transform: rotate(3deg);" />
+      </div>
     </div>
 
     <div class="grid-2">
@@ -294,7 +333,7 @@
       FIT2179 Data Visualisation 2, Monash University &nbsp;·&nbsp; Semester 1, 2026
     </p>
     <p style="margin-bottom:0.5rem">
-      <strong>Author:</strong> [Your Name] &nbsp;·&nbsp;
+      <strong>Author:</strong> Nathan Rodrigues &nbsp;·&nbsp;
       <strong>Created:</strong> May 2026 &nbsp;·&nbsp;
       <strong>Visualisation tool:</strong> Vega-Lite v5
     </p>

@@ -136,13 +136,14 @@ const chart0_sankey = {
 /* ================================================================
    CHART 1 — Choropleth Map with Time Slider
    ================================================================ */
+/* ================================================================
+   CHART 1 — Choropleth Map with Time Slider & Distinct Colors
+   ================================================================ */
 const chart1_choropleth = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 420,
   "projection": { "type": "mercator" },
-  
-  // Base Data: The timeline CSV allows filtering before joining GeoJSON
   "data": { "url": DATA_BASE + "choropleth_timeline.csv" },
   
   "params": [
@@ -164,9 +165,7 @@ const chart1_choropleth = {
   ],
   
   "transform": [
-    // Filter the CSV data by the slider year
     { "filter": "datum.Year == Year_selection" },
-    // Lookup the geographic boundaries for the matching state
     {
       "lookup": "STATE_NAME",
       "from": {
@@ -180,22 +179,34 @@ const chart1_choropleth = {
     }
   ],
   
-  "mark": { "type": "geoshape", "stroke": "#ffffff", "strokeWidth": 1.5, "cursor": "pointer" },
+  // We remove the static stroke from the mark to allow conditional encoding below
+  "mark": { "type": "geoshape", "cursor": "pointer" },
   
   "encoding": {
     "shape": { "field": "geo", "type": "geojson" },
     "color": {
       "field": "total_businesses",
       "type": "quantitative",
+      // STUDIO FIX: Using a Threshold scale to force distinct color buckets
       "scale": {
-        "scheme": "tealblues",
-        "domain": [0, 80000]
+        "type": "threshold",
+        "domain": [3000, 10000, 20000, 40000, 60000],
+        "range": ["#e8f4f8", "#badddf", "#8ecfdc", "#1a8fa0", "#0d3348", "#072535"]
       },
-      "legend": { "title": "Tourism Businesses", "format": ",.0f", "orient": "bottom-right" }
+      "legend": { "title": "Tourism Businesses", "format": ",.0f", "orient": "none", legendX: 500, legendY: 200}
+    },
+    // INTERACTIVITY: Make the stroke thick and coral colored on hover to "pop" it
+    "stroke": {
+      "condition": {"param": "hover", "empty": false, "value": CORAL},
+      "value": "#ffffff"
+    },
+    "strokeWidth": {
+      "condition": {"param": "hover", "empty": false, "value": 2.5},
+      "value": 0.8
     },
     "opacity": {
       "condition": {"param": "hover", "empty": false, "value": 1},
-      "value": 0.6
+      "value": 0.85
     },
     "tooltip": [
       { "field": "STATE_NAME", "type": "nominal", "title": "State" },
@@ -501,7 +512,7 @@ const chart_bump = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
   "height": 280,
-  "data": { "url": DATA_BASE + "intl_market_ranking.csv" },
+  "data": { "url": "data/intl_market_ranking.csv" },
   "mark": {"type": "line", "point": {"filled": true, "size": 100}, "strokeWidth": 3},
   "encoding": {
     "x": {
@@ -537,7 +548,7 @@ const chart_radial = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": 240,
   "height": 240,
-  "data": { "url": DATA_BASE + "accommodation_types.csv" },
+  "data": { "url": "data/accommodation_types.csv" },
   "params": [{
     "name": "hover",
     "select": {"type": "point", "on": "mouseover"}
@@ -821,7 +832,7 @@ const chart10_bubble = {
         "size": {
           "field": "output", 
           "type": "quantitative",
-          "scale": { "range": [2, 10] }, // smaller context bubbles
+          "scale": { "range": [4, 32] }, // <--- SHRUNK BUBBLES HERE
           "legend": null 
         },
         "color": {
