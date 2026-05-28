@@ -169,46 +169,61 @@
   </div>
 </section>
 
+<!-- ============================================================
+     SECTION 3 — INTERNATIONAL VISITORS
+     ============================================================ -->
 <section class="section section--white" id="section-international">
   <div class="container">
     <div class="section-header">
       <p class="section-number">Section 3 — International Visitors</p>
       <h2>The World Comes to Australia</h2>
       <p>
-        Before COVID-19, international visitors spent over $46 billion in Australia annually.
-        After almost vanishing in 2020–21, international tourism consumption has rebounded strongly,
-        reaching $53.7 billion in 2024–25.
+        International visitors spent $53.7 billion in 2024–25, but the composition of these visitors is rapidly changing.
+        Watch how the top 5 markets shifted rank through the pandemic, and discover the surprising reality of where they actually stay when they arrive.
       </p>
     </div>
 
+    <!-- The Hero Stats Bar -->
+    <div class="stat-row">
+      <div class="stat-block">
+        <span class="big-num">$53.7B</span>
+        <span class="stat-label">Inbound Visitor Spend (2024–25)</span>
+      </div>
+      <div class="stat-block">
+        <span class="big-num">8.3M</span>
+        <span class="stat-label">Total International Trips</span>
+      </div>
+      <div class="stat-block">
+        <span class="big-num">312.7M</span>
+        <span class="stat-label">Total Nights Spent</span>
+      </div>
+      <div class="stat-block">
+        <span class="big-num">$6,392</span>
+        <span class="stat-label">Avg. Spend Per Trip</span>
+      </div>
+    </div>
+
+    <!-- The New Charts -->
     <div class="grid-60-40">
       <div>
-        <div class="chart-card">
-          <p class="chart-title">International Visitor Consumption in Australia</p>
-          <p class="chart-subtitle">Total tourism expenditure by inbound visitors within Australia ($M)</p>
-          <div id="chart-intl-consumption"></div>
-        </div>
-
-        <div class="callout">
-          <p>
-            <strong>Key insight:</strong> The average international visitor spent <strong>$6,392 per trip</strong>
-            in 2024–25 — up from $4,782 in 2016–17 — reflecting longer stays and higher spending post-pandemic.
-          </p>
+        <div class="chart-card" style="min-height: 480px;">
+          <p class="chart-title">The Battle for Number One</p>
+          <p class="chart-subtitle">Bump chart: Ranking the Top 5 inbound markets by trip volume</p>
+          <div id="chart-bump"></div>
+          <div class="annotation">
+            <strong>Key insight:</strong> New Zealand overtook China during the border closures of 2020–21 and remains the top source market today.
+          </div>
         </div>
       </div>
 
       <div>
-        <div class="stat-block" style="margin-bottom:1.5rem">
-          <span class="big-num">$53.7B</span>
-          <span class="stat-label">International visitor spend in Australia (2024–25)</span>
-        </div>
-        <div class="stat-block" style="margin-bottom:1.5rem">
-          <span class="big-num">$6,392</span>
-          <span class="stat-label">Avg. spend per international trip (2024–25)</span>
-        </div>
-        <div class="stat-block">
-          <span class="big-num">23%</span>
-          <span class="stat-label">International share of all tourism GDP</span>
+        <div class="chart-card" style="display:flex; flex-direction:column; align-items:center; min-height: 480px;">
+          <p class="chart-title" style="align-self: flex-start;">Where Do They Stay?</p>
+          <p class="chart-subtitle" style="align-self: flex-start;">Polar chart: Total nights ('000) by accommodation</p>
+          <div id="chart-radial" style="margin-top:auto; margin-bottom:auto;"></div>
+          <div class="annotation" style="width:100%; margin-top:1.5rem;">
+            Rented houses (Airbnbs) and friends' properties account for over <strong>65% of all nights stayed</strong>, vastly outperforming traditional hotels!
+          </div>
         </div>
       </div>
     </div>
@@ -226,55 +241,23 @@
       </p>
     </div>
 
-    <div class="grid-2">
-      <div>
-        <div class="chart-card">
-          <p class="chart-title">Tourism Jobs by Industry (2024–25)</p>
-          <p class="chart-subtitle">Main jobs ('000) by tourism-related industry</p>
-          <div id="chart-jobs-industry"></div>
-          <div class="annotation">
-            Cafes, restaurants &amp; retail each employ more than 100,000 people in tourism roles.
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="chart-card">
-          <p class="chart-title">Tourism Industry Output by Sector (2024–25)</p>
-          <p class="chart-subtitle">Total industry output at basic prices ($M)</p>
-          <div id="chart-output"></div>
-          <div class="annotation">
-            Air &amp; water transport ($25.6B) generates the highest output of any individual sector.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:2rem">
-      <div class="chart-card">
-        <p class="chart-title">Output vs. Jobs — A Bubble View of Tourism Industries</p>
-        <p class="chart-subtitle">Each bubble = one tourism industry; size = output ($M)</p>
-        <div id="chart-bubble"></div>
-        <div class="annotation">
-          <strong>Interesting contrast:</strong> Air &amp; water transport produces high output with relatively few jobs (capital-intensive).
-          Cafes &amp; restaurants employ the most people but with moderate output — labour-intensive work.
-        </div>
+<!-- The Hero Bubble Chart -->
+    <div class="chart-card" style="min-height: 480px;">
+      <p class="chart-title">Productivity vs. Jobs — The Tourism Ecosystem (2024–25)</p>
+      <p class="chart-subtitle">Bubble size = Total Output ($M). X-Axis = Economic Productivity. Drag the bottom chart to zoom.</p>
+      <div id="chart-bubble"></div>
+      <div class="annotation">
+        <strong>Interesting contrast:</strong> Air & water transport is highly <strong>productive</strong> (far right), generating massive revenue per employee. Conversely, Cafes & Restaurants (top left) are labour-intensive, providing the bulk of the industry's jobs but with much lower revenue per head.
       </div>
     </div>
 
     <hr class="rule" style="margin-top:2.5rem"/>
 
-    <div style="margin-top:2.5rem">
-      <div class="chart-card">
-        <p class="chart-title">Total Tourism Employment Over Time</p>
-        <p class="chart-subtitle">Total main jobs in tourism industries ('000)</p>
-        <div id="chart-jobs-trend"></div>
-        <div class="annotation">
-          Employment fell from 522,000 (2018–19) to 376,500 during the pandemic — a loss of nearly
-          <strong>146,000 jobs</strong>. By 2024–25, the sector has not only recovered but reached
-          a new record of <strong>635,500 jobs</strong>.
-        </div>
-      </div>
-    </div>
+    <div class="chart-card" style="min-height: 420px;">
+      <p class="chart-title">The Great Recovery: Jobs Gained Since COVID-19</p>
+      <p class="chart-subtitle">Dumbbell plot: Comparing main jobs ('000) at the pandemic low (2021) vs. full recovery (2025)</p>
+      <div id="chart-dumbbell"></div>
+</div>
   </div>
 </section>
 
