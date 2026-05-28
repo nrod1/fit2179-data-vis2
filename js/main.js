@@ -495,51 +495,84 @@ const chart6_dom_intl = {
 };
 
 /* ================================================================
-   CHART 7 — Line: International Visitor Consumption
+   CHART 7A — Bump Chart: International Market Ranking
    ================================================================ */
-const chart7_intl_consumption = {
+const chart_bump = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "width": "container",
-  "height": 240,
-  "data": { "url": DATA_BASE + "intl_visitor_consumption.csv" },
-  "layer": [
-    {
-      "mark": { "type": "area", "interpolate": "monotone", "color": CORAL, "fillOpacity": 0.12, "line": true, "strokeWidth": 2.5 },
-      "encoding": {
-        "x": {
-          "field": "year", "type": "ordinal",
-          "sort": YEAR_ORDER,
-          "axis": { "title": null, "labelAngle": -30, "labelFontSize": 11 }
-        },
-        "y": {
-          "field": "consumption_m", "type": "quantitative",
-          "axis": { "title": "Consumption ($M)", "format": ",.0f", "labelFontSize": 11 }
-        },
-        "color": { "value": CORAL }
-      }
+  "height": 280,
+  "data": { "url": DATA_BASE + "intl_market_ranking.csv" },
+  "mark": {"type": "line", "point": {"filled": true, "size": 100}, "strokeWidth": 3},
+  "encoding": {
+    "x": {
+      "field": "Year", "type": "ordinal", 
+      "sort": YEAR_ORDER,
+      "axis": {"title": null, "labelAngle": -30, "labelFontSize": 11}
     },
-    {
-      "mark": { "type": "point", "filled": true, "size": 55, "color": CORAL, "tooltip": true },
-      "encoding": {
-        "x": { "field": "year", "type": "ordinal", "sort": YEAR_ORDER },
-        "y": { "field": "consumption_m", "type": "quantitative" },
-        "tooltip": [
-          { "field": "year", "type": "ordinal", "title": "Year" },
-          { "field": "consumption_m", "type": "quantitative", "title": "Consumption ($M)", "format": ",.0f" }
-        ]
-      }
+    "y": {
+      "field": "Rank", "type": "quantitative",
+      "scale": {"domain": [5.5, 0.5]}, // Reverses the scale so Rank 1 is at top
+      "axis": {"title": "Market Ranking", "tickCount": 5, "labelFontSize": 11}
     },
-    {
-      "mark": { "type": "text", "dy": -14, "fontSize": 9.5, "fontWeight": "bold", "color": CORAL },
-      "transform": [{ "filter": "datum.year === '2024-25'" }],
-      "encoding": {
-        "x": { "field": "year", "type": "ordinal", "sort": YEAR_ORDER },
-        "y": { "field": "consumption_m", "type": "quantitative" },
-        "text": { "value": "$53.7B" }
-      }
-    }
-  ]
+    "color": {
+      "field": "Country", "type": "nominal",
+      "scale": {
+        "domain": ["China", "New Zealand", "USA", "UK", "India"],
+        "range": [CORAL, TEAL, GOLD, NAVY, PURPLE]
+      },
+      "legend": {"orient": "bottom", "title": null}
+    },
+    "tooltip": [
+      {"field": "Country", "type": "nominal", "title": "Market"},
+      {"field": "Year", "type": "ordinal", "title": "Year"},
+      {"field": "Rank", "type": "quantitative", "title": "Rank"}
+    ]
+  }
 };
+
+/* ================================================================
+   CHART 7B — Radial Chart: Accommodation Types
+   ================================================================ */
+const chart_radial = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 240,
+  "height": 240,
+  "data": { "url": DATA_BASE + "accommodation_types.csv" },
+  "params": [{
+    "name": "hover",
+    "select": {"type": "point", "on": "mouseover"}
+  }],
+  "mark": {"type": "arc", "innerRadius": 20, "stroke": "#fff", "strokeWidth": 1.5, "cursor": "pointer"},
+  "encoding": {
+    "theta": {"field": "Nights_000", "type": "quantitative"},
+    "radius": {
+      "field": "Accommodation", 
+      "type": "nominal", 
+      "legend": null
+    },
+    "color": {
+      "field": "Accommodation", 
+      "type": "nominal",
+      "scale": {"range": [TEAL, GOLD, CORAL, NAVY, GREEN, PURPLE]},
+      "legend": {
+        "orient": "bottom",
+        "title": null,
+        "columns": 2,
+        "labelFontSize": 10
+      }
+    },
+    "opacity": {
+      "condition": {"param": "hover", "empty": false, "value": 1},
+      "value": 0.7
+    },
+    "tooltip": [
+      {"field": "Accommodation", "type": "nominal", "title": "Type"},
+      {"field": "Nights_000", "type": "quantitative", "title": "Nights ('000)", "format": ",.0f"}
+    ]
+  }
+};
+
+
 
 /* ================================================================
    CHART 8 — Concentric Symbol Map: Domestic vs Intl Spend
@@ -687,79 +720,120 @@ const chart9_donut = {
 };
 
 /* ================================================================
-   CHART 10 — Scatter/Bubble: Output vs Jobs by Industry (2024-25)
+   CHART 10 — Context & Focus Bubble Chart: Productivity vs Jobs
    ================================================================ */
 const chart10_bubble = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "width": "container",
-  "height": 320,
   "data": {
     "values": [
       { "industry": "Cafes & Restaurants",  "output": 21338, "jobs": 190.0, "category": "Food & Drink" },
       { "industry": "Air & Water Transport","output": 25642, "jobs": 40.1,  "category": "Transport" },
       { "industry": "Accommodation",        "output": 19889, "jobs": 105.6, "category": "Accommodation" },
-      { "industry": "Own. of Dwellings",    "output": 15549, "jobs": 0,     "category": "Property" },
       { "industry": "Travel Agencies",      "output": 9938,  "jobs": 14.6,  "category": "Services" },
-      { "industry": "Retail Trade",         "output": 0,     "jobs": 116.8, "category": "Retail" },
       { "industry": "Clubs, Pubs & Bars",   "output": 8200,  "jobs": 40.8,  "category": "Food & Drink" },
       { "industry": "Sports & Recreation",  "output": 4352,  "jobs": 28.5,  "category": "Recreation" },
       { "industry": "Other Road Transport", "output": 4263,  "jobs": 37.7,  "category": "Transport" },
-      { "industry": "Cultural Services",    "output": 3420,  "jobs": 13.6,  "category": "Culture" },
-      { "industry": "Education & Training", "output": 0,     "jobs": 35.0,  "category": "Services" },
-      { "industry": "Transport Rental",     "output": 2056,  "jobs": 0,     "category": "Transport" }
+      { "industry": "Cultural Services",    "output": 3420,  "jobs": 13.6,  "category": "Culture" }
     ]
   },
-  "params": [
-    {
-      "name": "Category_selection",
-      "bind": {
-        "input": "select",
-        "options": [null, "Food & Drink", "Transport", "Accommodation", "Services", "Recreation", "Culture"],
-        "labels": ["Show All", "Food & Drink", "Transport", "Accommodation", "Services", "Recreation", "Culture"],
-        "name": "Industry Category: "
-      }
-    },
-    {
-      "name": "hover",
-      "select": {"type": "point", "on": "mouseover", "clear": "mouseout"}
-    }
-  ],
   "transform": [
     { "filter": "datum.output > 0 && datum.jobs > 0" },
-    { "filter": "Category_selection == null || datum.category == Category_selection" }
+    { "calculate": "datum.output / datum.jobs", "as": "productivity" }
   ],
-  "mark": { "type": "circle", "stroke": "white", "strokeWidth": 1, "cursor": "pointer" },
-  "encoding": {
-    "x": {
-      "field": "output", "type": "quantitative",
-      "axis": { "title": "Industry Output ($M)", "format": ",.0f", "labelFontSize": 11 }
+  "vconcat": [
+    // --- TOP CHART (FOCUS / DETAIL) ---
+    {
+      "width": "container",
+      "height": 280,
+      "mark": { "type": "circle", "stroke": "white", "strokeWidth": 1, "cursor": "pointer" },
+      "encoding": {
+        "x": {
+          "field": "productivity", 
+          "type": "quantitative",
+          "scale": {"domain": {"param": "brush"}},
+          "axis": { "title": "Productivity ($M Output per 1,000 Jobs)", "labelFontSize": 11 }
+        },
+        "y": {
+          "field": "jobs", 
+          "type": "quantitative",
+          "axis": { "title": "Main Jobs ('000)", "labelFontSize": 11 }
+        },
+        "size": {
+          "field": "output", 
+          "type": "quantitative",
+          "scale": { "range": [100, 2000] },
+          "legend": { 
+            "title": "Total Output ($M)", 
+            "format": "$,.0f", 
+            "orient": "none",      // Detaches the legend
+            "legendX": 1000,        // Moves it inside the chart area
+            "legendY": 0,
+            "fillColor": "rgba(255, 255, 255, 0.85)", // Semi-transparent background
+            "padding": 10,
+            "cornerRadius": 5
+          }
+        },
+        "color": {
+          "field": "category", 
+          "type": "nominal",
+          "scale": {
+            "domain": ["Food & Drink","Transport","Accommodation","Services","Recreation","Culture"],
+            "range": [TEAL, CORAL, GOLD, PURPLE, GREEN, LIGHT]
+          },
+          "legend": { 
+            "title": "Category", 
+            "orient": "none",      // Detaches the legend
+            "legendX": 900,        // Places it right next to the Size legend
+            "legendY": 0,
+            "fillColor": "rgba(255, 255, 255, 0.85)",
+            "padding": 10,
+            "cornerRadius": 5
+          }
+        },
+        "tooltip": [
+          { "field": "industry", "type": "nominal", "title": "Industry" },
+          { "field": "productivity", "type": "quantitative", "title": "Productivity", "format": "$,.0f" },
+          { "field": "output", "type": "quantitative", "title": "Total Output ($M)", "format": "$,.0f" },
+          { "field": "jobs", "type": "quantitative", "title": "Total Jobs ('000)", "format": ",.1f" }
+        ]
+      }
     },
-    "y": {
-      "field": "jobs", "type": "quantitative",
-      "axis": { "title": "Main Jobs ('000)", "labelFontSize": 11 }
-    },
-    "size": {
-      "field": "output", "type": "quantitative",
-      "scale": { "range": [80, 1800] },
-      "legend": null
-    },
-    "color": {
-      "field": "category", "type": "nominal",
-      "scale": {
-        "domain": ["Food & Drink","Transport","Accommodation","Services","Recreation","Culture"],
-        "range": [TEAL, CORAL, GOLD, PURPLE, GREEN, LIGHT]
-      },
-      "legend": { "title": "Category", "orient": "top-right" }
-    },
-    "opacity": {
-      "condition": {"param": "hover", "empty": false, "value": 1},
-      "value": 0.6
-    },
-    "tooltip": [
-      { "field": "industry", "type": "nominal", "title": "Industry" },
-      { "field": "output", "type": "quantitative", "title": "Output ($M)", "format": ",.0f" },
-      { "field": "jobs", "type": "quantitative", "title": "Jobs ('000)", "format": ".1f" }
-    ]
+    // --- BOTTOM CHART (CONTEXT / OVERVIEW MAP) ---
+    {
+      "width": "container",
+      "height": 60,
+      "params": [{
+        "name": "brush",
+        "select": {"type": "interval", "encodings": ["x"]}
+      }],
+      "mark": { "type": "circle", "stroke": "white", "strokeWidth": 0.5 },
+      "encoding": {
+        "x": {
+          "field": "productivity", 
+          "type": "quantitative",
+          "axis": { "title": "Drag here to pan/zoom the chart above", "titleColor": "#1a8fa0", "titleFontWeight": "bold" }
+        },
+        "y": {
+          "field": "jobs", 
+          "type": "quantitative",
+          "axis": { "tickCount": 3, "title": "Jobs" }
+        },
+        "size": {
+          "field": "output", 
+          "type": "quantitative",
+          "scale": { "range": [2, 10] }, // smaller context bubbles
+          "legend": null 
+        },
+        "color": {
+          "field": "category", 
+          "type": "nominal",
+          "legend": null 
+        }
+      }
+    }
+  ],
+  "config": {
+    "concat": { "spacing": 20 } 
   }
 };
 
@@ -926,6 +1000,64 @@ const chart_marimekko = {
   }
 };
 
+
+/* ================================================================
+   CHART — Dumbbell Plot: Job Recovery by Industry
+   ================================================================ */
+const chart_dumbbell = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": "container",
+  "height": 320,
+  "data": { "url": DATA_BASE + "industry_jobs_recovery.csv" },
+  "encoding": {
+    "y": {
+      "field": "Industry",
+      "type": "nominal",
+      // Sorts the Y-axis so the industry with the most jobs is at the top
+      "sort": {"op": "max", "field": "Jobs", "order": "descending"},
+      "axis": {"title": null, "labelFontSize": 11, "grid": true}
+    }
+  },
+  "layer": [
+    // LAYER 1: The connecting line (the "bar" of the dumbbell)
+    {
+      "mark": {"type": "rule", "color": "#c8e0e8", "strokeWidth": 3},
+      "encoding": {
+        "x": {
+          "aggregate": "min", "field": "Jobs", "type": "quantitative",
+          "axis": {"title": "Tourism Main Jobs ('000)", "labelFontSize": 11}
+        },
+        "x2": {"aggregate": "max", "field": "Jobs"}
+      }
+    },
+    // LAYER 2: The dots representing the specific years
+    {
+      "mark": {"type": "circle", "size": 200, "opacity": 1, "cursor": "pointer"},
+      "encoding": {
+        "x": {"field": "Jobs", "type": "quantitative"},
+        "color": {
+          "field": "Year",
+          "type": "nominal",
+          "scale": {
+            "domain": ["2021 (COVID Low)", "2025 (Recovery)"],
+            "range": [CORAL, TEAL] // Using your shared color constants
+          },
+          "legend": {"title": "Timeline", "orient": "bottom-right"}
+        },
+        // Adding the tooltip to Layer 2
+        "tooltip": [
+          {"field": "Industry", "type": "nominal", "title": "Industry"},
+          {"field": "Year", "type": "nominal", "title": "Status"},
+          {"field": "Jobs", "type": "quantitative", "title": "Jobs ('000)", "format": ",.1f"}
+        ]
+      }
+    }
+  ]
+};
+
+
+
+
 /* ================================================================
    RENDER ALL CHARTS
    ================================================================ */
@@ -1032,10 +1164,12 @@ document.addEventListener("DOMContentLoaded", () => {
   renderChart("chart-jobs-industry",    chart4_jobs_industry);
   renderChart("chart-jobs-trend",       chart5_jobs_trend);
   renderChart("chart-dom-intl",         chart6_dom_intl);
-  renderChart("chart-intl-consumption", chart7_intl_consumption);
+  renderChart("chart-bump",             chart_bump);
+  renderChart("chart-radial",           chart_radial);
   renderChart("chart-symbol-map",       chart8_symbol_map);
   renderChart("chart-donut",            chart9_donut);
   renderChart("chart-bubble",           chart10_bubble);
   renderChart("chart-biz-trend",        chart11_biz_trend);
   renderChart("chart-output",           chart12_output);
+  renderChart("chart-dumbbell",         chart_dumbbell);
 });
