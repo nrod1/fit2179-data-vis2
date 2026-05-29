@@ -71,13 +71,25 @@ const chart0_sankey = {
     }
   ],
   "scales": [
-    {
-      "name": "color",
-      "type": "ordinal",
-      "domain": {"data": "all_nodes", "field": "name"},
-      "range": {"scheme": "category20"}
-    }
-  ],
+  {
+    "name": "color",
+    "type": "ordinal",
+    "domain": {"data": "all_nodes", "field": "name"},
+    "range": [
+      "#56B4E9",
+      "#E69F00",
+      "#0072B2",
+      "#CC79A7",
+      "#D55E00",
+      "#F0E442",
+      "#9057b4",
+      "#999999",
+      "#4488aa",
+      "#88CCEE",
+      "#DDCC77"
+    ]
+  }
+],
   "marks": [
     {
       "type": "path",
@@ -134,9 +146,6 @@ const chart0_sankey = {
 };
 
 /* ================================================================
-   CHART 1 — Choropleth Map with Time Slider
-   ================================================================ */
-/* ================================================================
    CHART 1 — Choropleth Map with Time Slider & Distinct Colors
    ================================================================ */
 const chart1_choropleth = {
@@ -144,76 +153,125 @@ const chart1_choropleth = {
   "width": "container",
   "height": 420,
   "projection": { "type": "mercator" },
-  "data": { "url": DATA_BASE + "choropleth_timeline.csv" },
-  
+
+  // params stay at the top level for the year slider only
   "params": [
     {
       "name": "Year_selection",
       "value": 2020,
-      "bind": {
-        "input": "range",
-        "min": 2020,
-        "max": 2025,
-        "step": 1,
-        "name": "Select Year: "
+      "bind": { "input": "range", "min": 2020, "max": 2025, "step": 1, "name": "Select Year: " }
+    }
+  ],
+
+  "layer": [
+
+    // ── 1. Choropleth (original, unchanged — just moved into layer) ──
+    {
+      "params": [{ "name": "hover", "select": { "type": "point", "on": "mouseover" } }],
+      "data": { "url": DATA_BASE + "choropleth_timeline.csv" },
+      "transform": [
+        { "filter": "datum.Year == Year_selection" },
+        {
+          "lookup": "STATE_NAME",
+          "from": {
+            "data": {
+              "url": DATA_BASE + "australia_states_simple.topojson",
+              "format": { "type": "topojson", "feature": "states" }
+            },
+            "key": "properties.STATE_NAME"
+          },
+          "as": "geo"
+        }
+      ],
+      "mark": { "type": "geoshape", "cursor": "pointer" },
+      "encoding": {
+        "shape": { "field": "geo", "type": "geojson" },
+        "color": {
+          "field": "total_businesses",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [3000, 10000, 20000, 40000, 60000],
+            "range": ["#e8f4f8", "#badddf", "#8ecfdc", "#1a8fa0", "#0d3348", "#072535"]
+          },
+          "legend": { "title": "Tourism Businesses", "format": ",.0f", "orient": "none", "legendX": 500, "legendY": 200 }
+        },
+        "stroke": {
+          "condition": { "param": "hover", "empty": false, "value": CORAL },
+          "value": "#ffffff"
+        },
+        "strokeWidth": {
+          "condition": { "param": "hover", "empty": false, "value": 2.5 },
+          "value": 0.8
+        },
+        "opacity": {
+          "condition": { "param": "hover", "empty": false, "value": 1 },
+          "value": 0.85
+        },
+        "tooltip": [
+          { "field": "STATE_NAME",        "type": "nominal",      "title": "State" },
+          { "field": "Year",              "type": "ordinal",       "title": "Year" },
+          { "field": "total_businesses",  "type": "quantitative",  "title": "Total Businesses", "format": "," }
+        ]
       }
     },
+
+    // ── 2. Annotation — dark box ──
     {
-      "name": "hover",
-      "select": {"type": "point", "on": "mouseover"}
-    }
-  ],
-  
-  "transform": [
-    { "filter": "datum.Year == Year_selection" },
+      "data": { "values": [{}] },
+      "mark": { "type": "rect", "color": "#0f2d38", "cornerRadius": 7, "opacity": 0.9 },
+      "encoding": {
+        "x":  { "value": 10  },
+        "x2": { "value": 248 },
+        "y":  { "value": 320 },
+        "y2": { "value": 415 }
+      }
+    },
+
+    // ── 3. Annotation — left teal accent bar ──
     {
-      "lookup": "STATE_NAME",
-      "from": {
-        "data": {
-          "url": DATA_BASE + "australia_states_simple.topojson",
-          "format": { "type": "topojson", "feature": "states" }
-        },
-        "key": "properties.STATE_NAME"
+      "data": { "values": [{}] },
+      "mark": { "type": "rule", "color": "#a8dcec", "strokeWidth": 3 },
+      "encoding": {
+        "x":  { "value": 10 },
+        "x2": { "value": 10 },
+        "y":  { "value": 320 },
+        "y2": { "value": 415 }
+      }
+    },
+
+    // ── 4. Annotation — title ──
+    {
+      "data": { "values": [{}] },
+      "mark": {
+        "type": "text", "align": "left",
+        "fontWeight": "bold", "fontSize": 11,
+        "color": "#a8dcec", "font": "DM Sans"
       },
-      "as": "geo"
+      "encoding": {
+        "x": { "value": 23 },
+        "y": { "value": 344 },
+        "text": { "value": "Unbroken growth: 2020 → 2025" }
+      }
+    },
+
+    // ── 5. Annotation — body text ──
+    {
+      "data": { "values": [{}] },
+      "mark": {
+        "type": "text", "align": "left",
+        "lineBreak": "\n", "limit": 220,
+        "fontSize": 10, "lineHeight": 17,
+        "color": "#c8dde3", "font": "DM Sans"
+      },
+      "encoding": {
+        "x": { "value": 23 },
+        "y": { "value": 367 },
+        "text": { "value": "Every state increased in tourism businesses from 2020.\nNot a single state declined in any year." }
+      }
     }
-  ],
-  
-  // We remove the static stroke from the mark to allow conditional encoding below
-  "mark": { "type": "geoshape", "cursor": "pointer" },
-  
-  "encoding": {
-    "shape": { "field": "geo", "type": "geojson" },
-    "color": {
-      "field": "total_businesses",
-      "type": "quantitative",
-      // STUDIO FIX: Using a Threshold scale to force distinct color buckets
-      "scale": {
-        "type": "threshold",
-        "domain": [3000, 10000, 20000, 40000, 60000],
-        "range": ["#e8f4f8", "#badddf", "#8ecfdc", "#1a8fa0", "#0d3348", "#072535"]
-      },
-      "legend": { "title": "Tourism Businesses", "format": ",.0f", "orient": "none", legendX: 500, legendY: 200}
-    },
-    // INTERACTIVITY: Make the stroke thick and coral colored on hover to "pop" it
-    "stroke": {
-      "condition": {"param": "hover", "empty": false, "value": CORAL},
-      "value": "#ffffff"
-    },
-    "strokeWidth": {
-      "condition": {"param": "hover", "empty": false, "value": 2.5},
-      "value": 0.8
-    },
-    "opacity": {
-      "condition": {"param": "hover", "empty": false, "value": 1},
-      "value": 0.85
-    },
-    "tooltip": [
-      { "field": "STATE_NAME", "type": "nominal", "title": "State" },
-      { "field": "Year", "type": "ordinal", "title": "Year" },
-      { "field": "total_businesses", "type": "quantitative", "title": "Total Businesses", "format": "," }
-    ]
-  }
+
+  ]
 };
 
 /* ================================================================
@@ -549,22 +607,33 @@ const chart_radial = {
   "width": 240,
   "height": 240,
   "data": { "url": "data/accommodation_types.csv" },
+  "transform": [
+    {
+      "calculate": "datum.Nights_000 / 312673 * 100",
+      "as": "pct"
+    }
+  ],
   "params": [{
     "name": "hover",
     "select": {"type": "point", "on": "mouseover"}
   }],
-  "mark": {"type": "arc", "innerRadius": 20, "stroke": "#fff", "strokeWidth": 1.5, "cursor": "pointer"},
+  "mark": {
+    "type": "arc",
+    "innerRadius": 60,
+    "outerRadius": 120,
+    "stroke": "#fff",
+    "strokeWidth": 2,
+    "cursor": "pointer"
+  },
   "encoding": {
-    "theta": {"field": "Nights_000", "type": "quantitative"},
-    "radius": {
-      "field": "Accommodation", 
-      "type": "nominal", 
-      "legend": null
+    "theta": {
+      "field": "pct",
+      "type": "quantitative"
     },
     "color": {
-      "field": "Accommodation", 
+      "field": "Accommodation",
       "type": "nominal",
-      "scale": {"range": [TEAL, GOLD, CORAL, NAVY, GREEN, PURPLE]},
+      "scale": {"range": [TEAL, GOLD, CORAL, NAVY, LIGHT, PURPLE]},
       "legend": {
         "orient": "bottom",
         "title": null,
@@ -572,17 +641,21 @@ const chart_radial = {
         "labelFontSize": 10
       }
     },
+    "radius": {
+      "condition": {"param": "hover", "empty": false, "value": 125},
+      "value": 120
+    },
     "opacity": {
       "condition": {"param": "hover", "empty": false, "value": 1},
-      "value": 0.7
+      "value": 0.82
     },
     "tooltip": [
-      {"field": "Accommodation", "type": "nominal", "title": "Type"},
-      {"field": "Nights_000", "type": "quantitative", "title": "Nights ('000)", "format": ",.0f"}
+      {"field": "Accommodation", "type": "nominal",    "title": "Type"},
+      {"field": "pct",           "type": "quantitative", "title": "Share of Nights (%)", "format": ".1f"},
+      {"field": "Nights_000",    "type": "quantitative", "title": "Nights ('000)",        "format": ",.0f"}
     ]
   }
 };
-
 
 
 /* ================================================================
@@ -789,7 +862,7 @@ const chart10_bubble = {
           "type": "nominal",
           "scale": {
             "domain": ["Food & Drink","Transport","Accommodation","Services","Recreation","Culture"],
-            "range": [TEAL, CORAL, GOLD, PURPLE, GREEN, LIGHT]
+            "range": [TEAL, CORAL, GOLD, PURPLE, "#5d5d8a", LIGHT]
           },
           "legend": { 
             "title": "Category", 
@@ -1024,13 +1097,13 @@ const chart_dumbbell = {
     "y": {
       "field": "Industry",
       "type": "nominal",
-      // Sorts the Y-axis so the industry with the most jobs is at the top
       "sort": {"op": "max", "field": "Jobs", "order": "descending"},
       "axis": {"title": null, "labelFontSize": 11, "grid": true}
     }
   },
   "layer": [
-    // LAYER 1: The connecting line (the "bar" of the dumbbell)
+
+    // LAYER 1: Connecting rule lines
     {
       "mark": {"type": "rule", "color": "#c8e0e8", "strokeWidth": 3},
       "encoding": {
@@ -1041,7 +1114,8 @@ const chart_dumbbell = {
         "x2": {"aggregate": "max", "field": "Jobs"}
       }
     },
-    // LAYER 2: The dots representing the specific years
+
+    // LAYER 2: Dots
     {
       "mark": {"type": "circle", "size": 200, "opacity": 1, "cursor": "pointer"},
       "encoding": {
@@ -1051,18 +1125,109 @@ const chart_dumbbell = {
           "type": "nominal",
           "scale": {
             "domain": ["2021 (COVID Low)", "2025 (Recovery)"],
-            "range": [CORAL, TEAL] // Using your shared color constants
+            "range": [CORAL, TEAL]
           },
           "legend": {"title": "Timeline", "orient": "bottom-right"}
         },
-        // Adding the tooltip to Layer 2
         "tooltip": [
-          {"field": "Industry", "type": "nominal", "title": "Industry"},
-          {"field": "Year", "type": "nominal", "title": "Status"},
-          {"field": "Jobs", "type": "quantitative", "title": "Jobs ('000)", "format": ",.1f"}
+          {"field": "Industry", "type": "nominal",    "title": "Industry"},
+          {"field": "Year",     "type": "nominal",    "title": "Status"},
+          {"field": "Jobs",     "type": "quantitative", "title": "Jobs ('000)", "format": ",.1f"}
         ]
       }
+    },
+
+    // LAYER 3: Annotation box background
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "rect",
+        "color": "#0f2d38",
+        "cornerRadius": 8,
+        "opacity": 0.92
+      },
+      "encoding": {
+        "x":  {"value": 395},
+        "x2": {"value": 630},
+        "y":  {"value": 168},
+        "y2": {"value": 295}
+      }
+    },
+
+    // LAYER 4: Annotation — stat callout (big number)
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "font": "Playfair Display",
+        "fontSize": 28,
+        "fontWeight": "bold",
+        "color": "#a8dcec"
+      },
+      "encoding": {
+        "x": {"value": 410},
+        "y": {"value": 195},
+        "text": {"value": "+56% jobs"}
+      }
+    },
+
+    // LAYER 5: Annotation — subtitle line 1
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#f0c060",
+        "font": "DM Sans"
+      },
+      "encoding": {
+        "x": {"value": 410},
+        "y": {"value": 218},
+        "text": {"value": "since the 2021 pandemic low"}
+      }
+    },
+
+    // LAYER 6: Annotation — body text
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10,
+        "lineHeight": 17,
+        "color": "#c8dde3",
+        "font": "DM Sans"
+      },
+      "encoding": {
+        "x": {"value": 410},
+        "y": {"value": 250},
+        "text": {"value": [
+          "407K → 635K Australians employed.",
+          "Every sector surpassed its COVID low.",
+          "Cafes & Restaurants led the rebound."
+        ]}
+      }
+    },
+
+    // LAYER 7: Left border accent on annotation box
+    {
+      "data": {"values": [{}]},
+      "mark": {
+        "type": "rule",
+        "color": "#f0c060",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x":  {"value": 395},
+        "x2": {"value": 395},
+        "y":  {"value": 168},
+        "y2": {"value": 295}
+      }
     }
+
   ]
 };
 
@@ -1122,7 +1287,7 @@ function renderSankey() {
 
     const color = d3.scaleOrdinal()
       .domain(graph.nodes.map(d => d.name))
-      .range([TEAL, GOLD, CORAL, NAVY, GREEN, PURPLE, LIGHT]);
+      .range([TEAL, GOLD, NAVY, PURPLE, LIGHT, "#5d5d8a", "#b088d8"]);
 
     g.append("g")
       .attr("fill", "none")
